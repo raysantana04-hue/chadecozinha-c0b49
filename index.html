@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Chá de Cozinha | Lígia</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #000000;
+      color: #ffffff;
+      text-align: center;
+      padding: 50px 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 38px;
+      letter-spacing: 2px;
+    }
+
+    header p {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .data {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    section {
+      max-width: 900px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .mensagem {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      border-bottom: 2px solid #000;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      border: 1px solid #000;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    button {
+      background-color: #000;
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:disabled {
+      background-color: #777;
+      cursor: not-allowed;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f2f2f2;
+      font-size: 14px;
+      margin-top: 50px;
+    }
+  </style>
+
+  <script>
+    function marcarPresente(botao) {
+      botao.innerText = "Escolhido ✔";
+      botao.disabled = true;
+    }
+  </script>
+</head>
+
+<body>
+
+<header>
+  <h1>Chá de Cozinha</h1>
+  <p>Lígia 🍽️</p>
+  <div class="data">📅 09/02/2026 • ⏰ 16:00</div>
+</header>
+
+<section>
+
+  <div class="mensagem">
+    <p>
+      Estou montando minha cozinha com muito carinho 🖤<br>
+      Se quiser me presentear, escolha um item da lista abaixo.
+    </p>
+  </div>
+
+  <h2>🍳 Utensílios</h2>
+  <ul>
+    <li>Conjunto de panelas <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Jogo de facas <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Concha, escumadeira e espátula <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Tábua de corte <button onclick="marcarPresente(this)">Escolher</button></li>
+  </ul>
+
+  <h2>🍽️ Mesa</h2>
+  <ul>
+    <li>Jogo de pratos <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Jogo de copos <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Xícaras <button onclick="marcarPresente(this)">Escolher</button></li>
+  </ul>
+
+  <h2>🧂 Organização</h2>
+  <ul>
+    <li>Potes herméticos <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Porta-temperos <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Escorredor de louça <button onclick="marcarPresente(this)">Escolher</button></li>
+  </ul>
+
+  <h2>🧼 Limpeza</h2>
+  <ul>
+    <li>Lixeira <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Pano de prato <button onclick="marcarPresente(this)">Escolher</button></li>
+    <li>Detergente e esponjas <button onclick="marcarPresente(this)">Escolher</button></li>
+  </ul>
+
+</section>
+
+<footer>
+  <p>Com carinho 🖤 | Chá de Cozinha da Lígia</p>
+</footer>
+
+</body>
+</html>
