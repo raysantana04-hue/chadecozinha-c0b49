@@ -1,235 +1,165 @@
-<h2>Lista de Presentes</h2>
-
-<div id="lista-presentes"></div>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Chá de Cozinha | Lígia</title>
+  <title>Chá da Lígia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "cha-cozinha-ligia.firebaseapp.com",
-    projectId: "cha-cozinha-ligia",
-    storageBucket: "cha-cozinha-ligia.appspot.com",
-    messagingSenderId: "XXXX",
-    appId: "XXXX"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-</script>
-<script type="module">
-  import { collection, doc, setDoc, onSnapshot } 
-  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-  // conexão com o Firestore (usa o db que você já colou)
-  const listaRef = collection(db, "presentes");
-
-  const itens = [
-    {
-      id: "panela",
-      nome: "Jogo de Panelas",
-      imagem: "https://via.placeholder.com/200"
-    },
-    {
-      id: "liquidificador",
-      nome: "Liquidificador",
-      imagem: "https://via.placeholder.com/200"
-    },
-    {
-      id: "cafeteira",
-      nome: "Cafeteira",
-      imagem: "https://via.placeholder.com/200"
-    }
-  ];
-
-  const container = document.getElementById("lista-presentes");
-
-  function renderizar(snapshot) {
-    container.innerHTML = "";
-
-    itens.forEach(item => {
-      const docRef = doc(db, "presentes", item.id);
-      const escolhido = snapshot.docs.find(d => d.id === item.id);
-
-      if (!escolhido) {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <img src="${item.imagem}" width="200"><br>
-          <strong>${item.nome}</strong><br>
-          <button>Escolher presente</button>
-          <hr>
-        `;
-
-        div.querySelector("button").onclick = async () => {
-          await setDoc(docRef, {
-            escolhido: true,
-            data: new Date()
-          });
-        };
-
-        container.appendChild(div);
-      }
-    });
-  }
-
-  onSnapshot(listaRef, renderizar);
-</script>
-
- body {
+    body {
       font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #000000;
+      background-color: #f5f1eb; /* bege */
+      color: #000;
       margin: 0;
-      padding: 0;
+      padding: 20px;
     }
 
-    header {
-      background-color: #000000;
-      color: #ffffff;
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      border: 2px solid #000;
+      padding: 30px;
+    }
+
+    h1 {
       text-align: center;
-      padding: 50px 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 38px;
-      letter-spacing: 2px;
-    }
-
-    header p {
-      font-size: 16px;
-      margin-top: 10px;
+      margin-bottom: 5px;
     }
 
     .data {
-      margin-top: 15px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    section {
-      max-width: 900px;
-      margin: auto;
-      padding: 30px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 16px;
     }
 
     .mensagem {
       text-align: center;
-      font-size: 18px;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
+      line-height: 1.6;
     }
 
     h2 {
-      border-bottom: 2px solid #000;
+      border-bottom: 1px solid #000;
       padding-bottom: 5px;
-      margin-top: 40px;
     }
 
     ul {
+      columns: 2;
       list-style: none;
       padding: 0;
     }
 
     li {
-      border: 1px solid #000;
-      border-radius: 8px;
-      padding: 14px 16px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      margin-bottom: 8px;
+      padding-left: 10px;
+      position: relative;
     }
 
-    button {
-      background-color: #000;
-      color: #fff;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 14px;
+    li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
     }
 
-    button:disabled {
-      background-color: #777;
-      cursor: not-allowed;
+    @media (max-width: 600px) {
+      ul {
+        columns: 1;
+      }
     }
 
-    footer {
+    .assinatura {
       text-align: center;
-      padding: 20px;
-      background-color: #f2f2f2;
-      font-size: 14px;
-      margin-top: 50px;
+      margin-top: 30px;
+      font-style: italic;
     }
   </style>
-
-  <script>
-    function marcarPresente(botao) {
-      botao.innerText = "Escolhido ✔";
-      botao.disabled = true;
-    }
-  </script>
 </head>
 
 <body>
 
-<header>
-  <h1>Chá de Cozinha</h1>
-  <p>Lígia 🍽️</p>
-  <div class="data">📅 09/02/2026 • ⏰ 16:00</div>
-</header>
+  <div class="container">
+    <h1>Chá da Lígia</h1>
+    <div class="data">📅 21/02/2026</div>
 
-<section>
+    <div class="mensagem">
+      <p>
+        Com muito carinho, convido você para celebrar comigo
+        esse momento tão especial 💖
+      </p>
+      <p>
+        Estou começando uma nova fase da minha vida e sua presença
+        vai tornar esse dia ainda mais feliz e inesquecível.
+      </p>
+      <p>
+        Preparei essa listinha com amor, fique à vontade para escolher 💫
+      </p>
+    </div>
 
-  <div class="mensagem">
-    <p>
-      Estou montando minha cozinha com muito carinho 🖤<br>
-      Se quiser me presentear, escolha um item da lista abaixo.
-    </p>
+    <h2>Lista de Presentes</h2>
+
+    <ul>
+      <li>Pano de chão</li>
+      <li>Amolador de faca</li>
+      <li>Escorredor de louça</li>
+      <li>Copos</li>
+      <li>Pratos</li>
+      <li>Xícaras</li>
+      <li>Talheres</li>
+      <li>Espremedor de batata</li>
+      <li>Batedeira</li>
+      <li>Cafeteira</li>
+      <li>Forma para bolo</li>
+      <li>Pregador</li>
+      <li>Toalha de banho e rosto</li>
+      <li>Luvas de silicone</li>
+      <li>Potes de vidro</li>
+      <li>Balde de gelo</li>
+      <li>Lixeira de banheiro</li>
+      <li>Lixinho de cozinha</li>
+      <li>Porta guardanapos</li>
+      <li>Cesto de roupa</li>
+      <li>Varal de chão</li>
+      <li>Pano de limpeza</li>
+      <li>Timer de cozinha</li>
+      <li>Leiteira</li>
+      <li>Cuscuzeira</li>
+      <li>Chaleira elétrica de vidro</li>
+      <li>Espremedor</li>
+      <li>Tesoura de cozinha</li>
+      <li>Cortador de pizza</li>
+      <li>Fatiador de queijo</li>
+      <li>Descascador de legumes</li>
+      <li>Suporte para papel toalha / filme / alumínio</li>
+      <li>Capacho</li>
+      <li>Parafusadeira</li>
+      <li>Espátula para manteiga</li>
+      <li>Aspirador de pó</li>
+      <li>Avental</li>
+      <li>Potes herméticos</li>
+      <li>Aromatizador de ambiente</li>
+      <li>Canecas</li>
+      <li>Saladeira</li>
+      <li>Jogo de bowls</li>
+      <li>Molheira</li>
+      <li>Petisqueira</li>
+      <li>Ferro de passar roupa</li>
+      <li>Tábua de passar roupas</li>
+      <li>Suporte para vassoura</li>
+      <li>Cabides</li>
+      <li>Frigideira de indução</li>
+      <li>Veda embalagem</li>
+      <li>Colher de pau</li>
+      <li>Extensão</li>
+      <li>Funil</li>
+      <li>Benjamim</li>
+    </ul>
+
+    <div class="assinatura">
+      Com carinho,<br>
+      <strong>Lígia</strong> 🤍
+    </div>
   </div>
-
-  <h2>🍳 Utensílios</h2>
-  <ul>
-    <li>Conjunto de panelas <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Jogo de facas <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Concha, escumadeira e espátula <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Tábua de corte <button onclick="marcarPresente(this)">Escolher</button></li>
-  </ul>
-
-  <h2>🍽️ Mesa</h2>
-  <ul>
-    <li>Jogo de pratos <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Jogo de copos <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Xícaras <button onclick="marcarPresente(this)">Escolher</button></li>
-  </ul>
-
-  <h2>🧂 Organização</h2>
-  <ul>
-    <li>Potes herméticos <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Porta-temperos <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Escorredor de louça <button onclick="marcarPresente(this)">Escolher</button></li>
-  </ul>
-
-  <h2>🧼 Limpeza</h2>
-  <ul>
-    <li>Lixeira <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Pano de prato <button onclick="marcarPresente(this)">Escolher</button></li>
-    <li>Detergente e esponjas <button onclick="marcarPresente(this)">Escolher</button></li>
-  </ul>
-
-</section>
-
-<footer>
-  <p>Com carinho 🖤 | Chá de Cozinha da Lígia</p>
-</footer>
 
 </body>
 </html>
