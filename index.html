@@ -1,165 +1,110 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Chá da Lígia</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Chá da Lígia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f5f1eb; /* bege */
-      color: #000;
-      margin: 0;
-      padding: 20px;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      border: 2px solid #000;
-      padding: 30px;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 5px;
-    }
-
-    .data {
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 16px;
-    }
-
-    .mensagem {
-      text-align: center;
-      margin-bottom: 30px;
-      line-height: 1.6;
-    }
-
-    h2 {
-      border-bottom: 1px solid #000;
-      padding-bottom: 5px;
-    }
-
-    ul {
-      columns: 2;
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      margin-bottom: 8px;
-      padding-left: 10px;
-      position: relative;
-    }
-
-    li::before {
-      content: "•";
-      position: absolute;
-      left: 0;
-    }
-
-    @media (max-width: 600px) {
-      ul {
-        columns: 1;
-      }
-    }
-
-    .assinatura {
-      text-align: center;
-      margin-top: 30px;
-      font-style: italic;
-    }
-  </style>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #000;
+  padding: 20px;
+}
+.container {
+  max-width: 700px;
+  margin: auto;
+  background: #fff;
+  border: 2px solid #000;
+  padding: 20px;
+}
+h1 {
+  text-align: center;
+}
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+button {
+  background: black;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+button:hover {
+  opacity: 0.8;
+}
+</style>
 </head>
 
 <body>
+<div class="container">
+<h1>Chá da Lígia 🤍</h1>
+<p style="text-align:center">
+Escolha um presente com carinho.<br>
+Quando alguém escolher, ele sai da lista 💐
+</p>
 
-  <div class="container">
-    <h1>Chá da Lígia</h1>
-    <div class="data">📅 21/02/2026</div>
+<div id="lista"></div>
+</div>
 
-    <div class="mensagem">
-      <p>
-        Com muito carinho, convido você para celebrar comigo
-        esse momento tão especial 💖
-      </p>
-      <p>
-        Estou começando uma nova fase da minha vida e sua presença
-        vai tornar esse dia ainda mais feliz e inesquecível.
-      </p>
-      <p>
-        Preparei essa listinha com amor, fique à vontade para escolher 💫
-      </p>
-    </div>
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-    <h2>Lista de Presentes</h2>
+<script>
+const firebaseConfig = {
+  COLE_AQUI_SUAS_CHAVES_FIREBASE
+};
 
-    <ul>
-      <li>Pano de chão</li>
-      <li>Amolador de faca</li>
-      <li>Escorredor de louça</li>
-      <li>Copos</li>
-      <li>Pratos</li>
-      <li>Xícaras</li>
-      <li>Talheres</li>
-      <li>Espremedor de batata</li>
-      <li>Batedeira</li>
-      <li>Cafeteira</li>
-      <li>Forma para bolo</li>
-      <li>Pregador</li>
-      <li>Toalha de banho e rosto</li>
-      <li>Luvas de silicone</li>
-      <li>Potes de vidro</li>
-      <li>Balde de gelo</li>
-      <li>Lixeira de banheiro</li>
-      <li>Lixinho de cozinha</li>
-      <li>Porta guardanapos</li>
-      <li>Cesto de roupa</li>
-      <li>Varal de chão</li>
-      <li>Pano de limpeza</li>
-      <li>Timer de cozinha</li>
-      <li>Leiteira</li>
-      <li>Cuscuzeira</li>
-      <li>Chaleira elétrica de vidro</li>
-      <li>Espremedor</li>
-      <li>Tesoura de cozinha</li>
-      <li>Cortador de pizza</li>
-      <li>Fatiador de queijo</li>
-      <li>Descascador de legumes</li>
-      <li>Suporte para papel toalha / filme / alumínio</li>
-      <li>Capacho</li>
-      <li>Parafusadeira</li>
-      <li>Espátula para manteiga</li>
-      <li>Aspirador de pó</li>
-      <li>Avental</li>
-      <li>Potes herméticos</li>
-      <li>Aromatizador de ambiente</li>
-      <li>Canecas</li>
-      <li>Saladeira</li>
-      <li>Jogo de bowls</li>
-      <li>Molheira</li>
-      <li>Petisqueira</li>
-      <li>Ferro de passar roupa</li>
-      <li>Tábua de passar roupas</li>
-      <li>Suporte para vassoura</li>
-      <li>Cabides</li>
-      <li>Frigideira de indução</li>
-      <li>Veda embalagem</li>
-      <li>Colher de pau</li>
-      <li>Extensão</li>
-      <li>Funil</li>
-      <li>Benjamim</li>
-    </ul>
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-    <div class="assinatura">
-      Com carinho,<br>
-      <strong>Lígia</strong> 🤍
-    </div>
-  </div>
+const itens = [
+"pano de chão","amolador de faca","escorredor de louça","copos","pratos",
+"xícaras","talheres","espremedor de batata","batedeira","cafeteira",
+"forma para bolo","pregador","toalha de banho e rosto","luvas de silicone",
+"potes de vidro","balde de gelo","lixeira de banheiro","lixinho de cozinha",
+"porta guardanapos","cesto de roupa","varal de chão","pano de limpeza",
+"timer de cozinha","leiteira","cuscuzeira","chaleira elétrica de vidro",
+"espremedor","tesoura de cozinha","cortador de pizza","fatiador de queijo",
+"descascador de legumes","suporte papel toalha/filme/alumínio","capacho",
+"parafusadeira","espátula","aspirador de pó","avental","potes herméticos",
+"aromatizador","canecas","saladeira","jogo de bowls","molheira",
+"petisqueira","ferro de passar","tábua de passar","suporte pra vassoura",
+"cabides","frigideira de indução","veda embalagem","colher de pau",
+"extensão","funil","benjamim"
+];
+
+const lista = document.getElementById("lista");
+
+db.collection("presentes").onSnapshot(snapshot => {
+  lista.innerHTML = "";
+  itens.forEach(nome => {
+    const doc = snapshot.docs.find(d => d.id === nome);
+    if (!doc) {
+      const div = document.createElement("div");
+      div.className = "item";
+      div.innerHTML = `
+        <span>${nome}</span>
+        <button onclick="escolher('${nome}')">Escolher</button>
+      `;
+      lista.appendChild(div);
+    }
+  });
+});
+
+function escolher(nome) {
+  db.collection("presentes").doc(nome).set({
+    escolhido: true
+  });
+}
+</script>
 
 </body>
 </html>
