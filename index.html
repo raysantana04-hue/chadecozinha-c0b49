@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-<meta charset="UTF-8">
-<title>Chá de Cozinha da Lígia</title>
-
-<style>
-
-body{
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
@@ -17,35 +8,56 @@ body{
 
 body{
 font-family: Arial;
-text-align:center;
 background:#f5f1ea;
+text-align:center;
+margin:0;
+}
+
+.container{
+background:white;
+max-width:600px;
+margin:auto;
+padding:20px;
+border-radius:10px;
 }
 
 h1{
-color:#5a4b3c;
+color:#000;
+}
+
+.mensagem{
+color:#555;
+margin-bottom:20px;
 }
 
 input{
 padding:10px;
-margin:10px;
-}
-
-button{
-padding:10px;
-background:black;
-color:white;
-border:none;
-cursor:pointer;
+width:80%;
+margin-bottom:20px;
 }
 
 .item{
-background:white;
+
+background:#f8f8f8;
 margin:10px;
+padding:15px;
+border-radius:8px;
+
+}
+
+button{
+
+background:black;
+color:white;
+border:none;
 padding:10px;
-width:300px;
-margin-left:auto;
-margin-right:auto;
-border-radius:10px;
+margin-top:10px;
+cursor:pointer;
+
+}
+
+button:hover{
+background:#333;
 }
 
 </style>
@@ -54,15 +66,25 @@ border-radius:10px;
 
 <body>
 
+<div class="container">
+
 <h1>Chá de Cozinha da Lígia 🤍</h1>
 
 <p>21 de Fevereiro de 2026</p>
 
-<p>Escolha um presente com carinho 💐</p>
+<p class="mensagem">
+
+Com o coração cheio de alegria, convido você para esse momento especial 💐
+
+Escolha um presente com carinho.
+
+</p>
 
 <input id="nome" placeholder="Digite seu nome">
 
 <div id="lista"></div>
+
+</div>
 
 <script>
 
@@ -75,19 +97,53 @@ let presentes = [
 "Pratos",
 "Xícaras",
 "Talheres",
+"Espremedor de batata",
 "Batedeira",
 "Cafeteira",
 "Forma para bolo",
-"Toalha",
+"Pregador",
+"Toalha de banho e rosto",
+"Luvas de silicone",
 "Potes de vidro",
-"Lixeira",
-"Varal",
+"Balde de gelo",
+"Lixeira de banheiro",
+"Lixeira de cozinha",
+"Porta guardanapo",
+"Cesto de roupa",
+"Varal de chão",
+"Pano de limpeza",
+"Timer de cozinha",
+"Leiteira",
+"Cuscuzeira",
+"Chaleira elétrica",
+"Espremedor",
+"Tesoura de cozinha",
+"Cortador de pizza",
+"Fatiador de queijo",
+"Descascador",
+"Suporte papel toalha",
+"Capacho",
+"Parafusadeira",
+"Espátula",
 "Aspirador",
+"Avental",
+"Potes herméticos",
+"Aromatizador",
+"Canecas",
+"Saladeira",
+"Bowls",
+"Molheira",
+"Petisqueira",
 "Ferro de passar",
+"Tábua de passar",
+"Suporte vassoura",
 "Cabides",
 "Frigideira",
+"Veda embalagem",
+"Colher de pau",
 "Extensão",
-"Funil"
+"Funil",
+"Benjamim"
 
 ]
 
@@ -99,9 +155,9 @@ lista.innerHTML += `
 
 <div class="item">
 
-${item}
+<b>${item}</b>
 
-<br><br>
+<br>
 
 <button onclick="escolher(this)">
 Escolher
@@ -127,13 +183,15 @@ return
 
 botao.parentElement.innerHTML =
 
-"Reservado por " + nome + " ❤️"
+"✅ Reservado por <b>" + nome + "</b>"
 
 }
 
 </script>
 
 </body>
+
 </html>
+                                                                           
 
 
