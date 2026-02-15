@@ -1,40 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Chá de Cozinha da Lígia</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:Montserrat;
+background:#f5f1ea;
+color:#333;
+}
+
+.topo{
+text-align:center;
+padding:40px 20px;
+background:white;
+}
+
+.topo h1{
+font-family:'Playfair Display';
+font-size:40px;
+margin:0;
+}
+
+.data{
+margin-top:10px;
+font-size:18px;
+}
+
+.mensagem{
+max-width:600px;
+margin:20px auto;
+line-height:1.6;
+}
+
+.container{
+max-width:700px;
+margin:auto;
+padding:20px;
+}
+
+.card{
+
+background:white;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.1);
+
+}
+
+.card b{
+font-size:18px;
+}
+
+input{
+
+width:100%;
+padding:8px;
+margin-top:8px;
+border:1px solid #ccc;
+border-radius:5px;
+
+}
+
+button{
+
+margin-top:10px;
+background:black;
+color:white;
+border:none;
+padding:10px;
+width:100%;
+border-radius:5px;
+font-size:15px;
+cursor:pointer;
+
+}
+
+button:hover{
+background:#333;
+}
+
+footer{
+
+text-align:center;
+padding:30px;
+font-size:14px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="topo">
+
+<h1>Chá de Cozinha da Lígia</h1>
+
+<div class="data">
+21 de Fevereiro de 2026
+</div>
+
+<div class="mensagem">
+
+Com o coração cheio de alegria, convido você para fazer parte desse momento tão especial da minha vida 🤍<br><br>
+
+Preparei essa lista com muito carinho.<br>
+
+Sua presença e seu gesto significam muito para mim.<br><br>
+
+Que Deus abençoe sua vida grandemente ✨
+
+</div>
+
+</div>
+
+<div class="container">
+
+<div id="lista"></div>
+
+</div>
+
+<footer>
+
+Feito com carinho 🤍
+
+</footer>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+
+<script>
+
+const firebaseConfig = {
+apiKey: "AIza...",
+authDomain: "site-cha-cozinha.firebaseapp.com",
+projectId: "site-cha-cozinha",
+storageBucket: "site-cha-cozinha.appspot.com",
+messagingSenderId: "123",
+appId: "1:123:web:abc"
+};
+
+
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const db=firebase.firestore();
+
+
+const itens=[
+
+"pano de chão",
+"amolador de faca",
+"escorredor de louça",
+"copos",
+"pratos",
+"xícaras",
+"talheres",
+"batedeira",
+"cafeteira",
+"forma para bolo",
+"toalha de banho e rosto",
+"potes de vidro",
+"lixeira de banheiro",
+"cesto de roupa",
+"varal de chão",
+"leiteira",
+"cuscuzeira",
+"chaleira elétrica",
+"tesoura de cozinha",
+"capacho",
+"aspirador de pó",
+"avental",
+"canecas",
+"saladeira",
+"petisqueira",
+"ferro de passar",
+"cabides",
+"frigideira",
+"colher de pau",
+"extensão",
+"funil",
+"benjamim"
+
+];
+
+
 const lista=document.getElementById("lista");
-const escolhidosDiv=document.getElementById("escolhidos");
+
 
 db.collection("presentes").onSnapshot(snapshot=>{
 
 lista.innerHTML="";
-escolhidosDiv.innerHTML="";
 
 itens.forEach(item=>{
 
-const doc=snapshot.docs.find(doc=>doc.id==item);
+if(!snapshot.docs.find(doc=>doc.id==item)){
 
-if(doc){
-
-// JA ESCOLHIDO
-escolhidosDiv.innerHTML+=`
-
-<div class="card">
-
-<b>${item}</b><br>
-
-Escolhido por: ${doc.data().nome} 🤍
-
-</div>
-
-`;
-
-}else{
-
-// DISPONIVEL
 lista.innerHTML+=`
 
 <div class="card">
 
 <b>${item}</b>
 
-<input id="${item}" placeholder="Seu nome">
+<input id="${item}" placeholder="Digite seu nome">
 
 <button onclick="escolher('${item}')">
 
@@ -51,3 +231,30 @@ Escolher presente
 });
 
 });
+
+
+function escolher(item){
+
+let nome=document.getElementById(item).value;
+
+if(nome==""){
+
+alert("Digite seu nome 🤍");
+
+return;
+
+}
+
+db.collection("presentes").doc(item).set({
+
+nome:nome
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
+
