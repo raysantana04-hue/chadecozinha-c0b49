@@ -1,110 +1,53 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<title>Chá da Lígia</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+const lista=document.getElementById("lista");
+const escolhidosDiv=document.getElementById("escolhidos");
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #000;
-  padding: 20px;
-}
-.container {
-  max-width: 700px;
-  margin: auto;
-  background: #fff;
-  border: 2px solid #000;
-  padding: 20px;
-}
-h1 {
-  text-align: center;
-}
-.item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-button {
-  background: black;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  cursor: pointer;
-}
-button:hover {
-  opacity: 0.8;
-}
-</style>
-</head>
+db.collection("presentes").onSnapshot(snapshot=>{
 
-<body>
-<div class="container">
-<h1>Chá da Lígia 🤍</h1>
-<p style="text-align:center">
-Escolha um presente com carinho.<br>
-Quando alguém escolher, ele sai da lista 💐
-</p>
+lista.innerHTML="";
+escolhidosDiv.innerHTML="";
 
-<div id="lista"></div>
+itens.forEach(item=>{
+
+const doc=snapshot.docs.find(doc=>doc.id==item);
+
+if(doc){
+
+// JA ESCOLHIDO
+escolhidosDiv.innerHTML+=`
+
+<div class="card">
+
+<b>${item}</b><br>
+
+Escolhido por: ${doc.data().nome} 🤍
+
 </div>
 
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+`;
 
-<script>
-const firebaseConfig = {
-  COLE_AQUI_SUAS_CHAVES_FIREBASE
-};
+}else{
 
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// DISPONIVEL
+lista.innerHTML+=`
 
-const itens = [
-"pano de chão","amolador de faca","escorredor de louça","copos","pratos",
-"xícaras","talheres","espremedor de batata","batedeira","cafeteira",
-"forma para bolo","pregador","toalha de banho e rosto","luvas de silicone",
-"potes de vidro","balde de gelo","lixeira de banheiro","lixinho de cozinha",
-"porta guardanapos","cesto de roupa","varal de chão","pano de limpeza",
-"timer de cozinha","leiteira","cuscuzeira","chaleira elétrica de vidro",
-"espremedor","tesoura de cozinha","cortador de pizza","fatiador de queijo",
-"descascador de legumes","suporte papel toalha/filme/alumínio","capacho",
-"parafusadeira","espátula","aspirador de pó","avental","potes herméticos",
-"aromatizador","canecas","saladeira","jogo de bowls","molheira",
-"petisqueira","ferro de passar","tábua de passar","suporte pra vassoura",
-"cabides","frigideira de indução","veda embalagem","colher de pau",
-"extensão","funil","benjamim"
-];
+<div class="card">
 
-const lista = document.getElementById("lista");
+<b>${item}</b>
 
-db.collection("presentes").onSnapshot(snapshot => {
-  lista.innerHTML = "";
-  itens.forEach(nome => {
-    const doc = snapshot.docs.find(d => d.id === nome);
-    if (!doc) {
-      const div = document.createElement("div");
-      div.className = "item";
-      div.innerHTML = `
-        <span>${nome}</span>
-        <button onclick="escolher('${nome}')">Escolher</button>
-      `;
-      lista.appendChild(div);
-    }
-  });
+<input id="${item}" placeholder="Seu nome">
+
+<button onclick="escolher('${item}')">
+
+Escolher presente
+
+</button>
+
+</div>
+
+`;
+
+}
+
 });
 
-function escolher(nome) {
-  db.collection("presentes").doc(nome).set({
-    escolhido: true
-  });
-}
-</script>
-
-</body>
-</html>
+});
