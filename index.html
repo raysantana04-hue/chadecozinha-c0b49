@@ -1,232 +1,151 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <title>Chá de Cozinha da Lígia</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Montserrat&display=swap" rel="stylesheet">
 
 <style>
 
 body{
-margin:0;
-font-family:Montserrat;
-background:#f5f1ea;
-color:#333;
-}
-
-.topo{
+font-family: Arial;
 text-align:center;
-padding:40px 20px;
+background:#f5f1ea;
+}
+
+h1{
+color:#5a4b3c;
+}
+
+.item{
 background:white;
-}
-
-.topo h1{
-font-family:'Playfair Display';
-font-size:40px;
-margin:0;
-}
-
-.data{
-margin-top:10px;
-font-size:18px;
-}
-
-.mensagem{
-max-width:600px;
-margin:20px auto;
-line-height:1.6;
-}
-
-.container{
-max-width:700px;
-margin:auto;
-padding:20px;
-}
-
-.card{
-
-background:white;
-padding:15px;
-margin-bottom:15px;
+margin:10px;
+padding:10px;
 border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.1);
-
-}
-
-.card b{
-font-size:18px;
-}
-
-input{
-
-width:100%;
-padding:8px;
-margin-top:8px;
-border:1px solid #ccc;
-border-radius:5px;
-
+width:300px;
+margin-left:auto;
+margin-right:auto;
 }
 
 button{
-
-margin-top:10px;
-background:black;
-color:white;
+background:#c9b8a6;
 border:none;
-padding:10px;
-width:100%;
+padding:5px 10px;
 border-radius:5px;
-font-size:15px;
 cursor:pointer;
-
 }
 
-button:hover{
-background:#333;
-}
-
-footer{
-
-text-align:center;
-padding:30px;
-font-size:14px;
-
+input{
+padding:5px;
+margin:5px;
 }
 
 </style>
 
 </head>
-
 <body>
 
-<div class="topo">
+<h1>Chá de Cozinha da Lígia 🤍</h1>
 
-<h1>Chá de Cozinha da Lígia</h1>
+<p>
 
-<div class="data">
 21 de Fevereiro de 2026
-</div>
 
-<div class="mensagem">
+<br><br>
 
-Com o coração cheio de alegria, convido você para fazer parte desse momento tão especial da minha vida 🤍<br><br>
+Com o coração cheio de alegria, convido você para fazer parte desse momento tão especial da minha vida 🤍
 
-Preparei essa lista com muito carinho.<br>
+<br><br>
 
-Sua presença e seu gesto significam muito para mim.<br><br>
+Preparei essa lista com muito carinho.
+
+<br>
+
+Sua presença e seu gesto significam muito para mim.
+
+<br><br>
 
 Que Deus abençoe sua vida grandemente ✨
 
-</div>
+</p>
 
-</div>
+<h2>Escolha um presente 🎁</h2>
 
-<div class="container">
+<input id="nome" placeholder="Seu nome">
 
 <div id="lista"></div>
 
-</div>
-
-<footer>
-
-Feito com carinho 🤍
-
-</footer>
-
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-
 <script>
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+const itens = [
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyA9JzHnIwx4R5veJdiDIbSKKAS68l_UpTQ",
-  authDomain: "cha-cozinha-ligia.firebaseapp.com",
-  projectId: "cha-cozinha-ligia",
-  storageBucket: "cha-cozinha-ligia.firebasestorage.app",
-  messagingSenderId: "327536857308",
-  appId: "1:327536857308:web:b6a9db3fb0f30a30d5e419"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-};
-
-firebase.initializeApp(firebaseConfig);
-
-const db=firebase.firestore();
-
-
-const itens=[
-
-"pano de chão",
-"amolador de faca",
-"escorredor de louça",
-"copos",
-"pratos",
-"xícaras",
-"talheres",
-"batedeira",
-"cafeteira",
-"forma para bolo",
-"toalha de banho e rosto",
-"potes de vidro",
-"lixeira de banheiro",
-"cesto de roupa",
-"varal de chão",
-"leiteira",
-"cuscuzeira",
-"chaleira elétrica",
-"tesoura de cozinha",
-"capacho",
-"aspirador de pó",
-"avental",
-"canecas",
-"saladeira",
-"petisqueira",
-"ferro de passar",
-"cabides",
-"frigideira",
-"colher de pau",
-"extensão",
-"funil",
-"benjamim"
+"Pano de chão",
+"Amolador de faca",
+"Escorredor de louça",
+"Copos",
+"Pratos",
+"Xícaras",
+"Talheres",
+"Espremedor de batata",
+"Batedeira",
+"Cafeteira",
+"Forma para bolo",
+"Pregador",
+"Toalha de banho",
+"Luvas de silicone",
+"Potes de vidro",
+"Balde de gelo",
+"Lixeira de banheiro",
+"Lixeira de cozinha",
+"Cesto de roupa",
+"Varal de chão",
+"Timer de cozinha",
+"Leiteira",
+"Cuscuzeira",
+"Chaleira elétrica",
+"Tesoura de cozinha",
+"Cortador de pizza",
+"Descascador de legumes",
+"Capacho",
+"Parafusadeira",
+"Aspirador de pó",
+"Avental",
+"Potes herméticos",
+"Canecas",
+"Saladeira",
+"Petisqueira",
+"Ferro de passar",
+"Tábua de passar",
+"Cabides",
+"Frigideira",
+"Extensão",
+"Funil"
 
 ];
 
+function carregar(){
 
-const lista=document.getElementById("lista");
+let escolhidos =
+JSON.parse(localStorage.getItem("escolhidos")) || [];
 
-
-db.collection("presentes").onSnapshot(snapshot=>{
+let lista = document.getElementById("lista");
 
 lista.innerHTML="";
 
 itens.forEach(item=>{
 
-if(!snapshot.docs.find(doc=>doc.id==item)){
+if(!escolhidos.includes(item)){
 
-lista.innerHTML+=`
+lista.innerHTML += `
 
-<div class="card">
+<div class="item">
 
-<b>${item}</b>
+${item}
 
-<input id="${item}" placeholder="Digite seu nome">
+<br><br>
 
 <button onclick="escolher('${item}')">
 
-Escolher presente
+Escolher
 
 </button>
 
@@ -238,31 +157,38 @@ Escolher presente
 
 });
 
-});
-
+}
 
 function escolher(item){
 
-let nome=document.getElementById(item).value;
+let nome =
+document.getElementById("nome").value;
 
 if(nome==""){
 
-alert("Digite seu nome 🤍");
+alert("Digite seu nome");
 
 return;
 
 }
 
-db.collection("presentes").doc(item).set({
+let escolhidos =
+JSON.parse(localStorage.getItem("escolhidos")) || [];
 
-nome:nome
+escolhidos.push(item);
 
-});
+localStorage.setItem("escolhidos",
+JSON.stringify(escolhidos));
+
+alert(nome + " escolheu " + item + " 💖");
+
+carregar();
 
 }
+
+carregar();
 
 </script>
 
 </body>
 </html>
-
