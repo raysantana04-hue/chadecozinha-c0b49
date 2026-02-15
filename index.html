@@ -7,15 +7,67 @@
 <style>
 
 body{
-<h2>Escolha seu presente 🎁</h2>
+  <!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Chá de Cozinha da Lígia</title>
 
-<input type="text" id="nome" placeholder="Digite seu nome">
+<style>
 
-<ul id="listaPresentes"></ul>
+body{
+font-family: Arial;
+text-align:center;
+background:#f5f1ea;
+}
+
+h1{
+color:#5a4b3c;
+}
+
+input{
+padding:10px;
+margin:10px;
+}
+
+button{
+padding:10px;
+background:black;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.item{
+background:white;
+margin:10px;
+padding:10px;
+width:300px;
+margin-left:auto;
+margin-right:auto;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Chá de Cozinha da Lígia 🤍</h1>
+
+<p>21 de Fevereiro de 2026</p>
+
+<p>Escolha um presente com carinho 💐</p>
+
+<input id="nome" placeholder="Digite seu nome">
+
+<div id="lista"></div>
 
 <script>
 
 let presentes = [
+
 "Pano de chão",
 "Amolador de faca",
 "Escorredor de louça",
@@ -23,85 +75,65 @@ let presentes = [
 "Pratos",
 "Xícaras",
 "Talheres",
-"Espremedor de batata",
 "Batedeira",
 "Cafeteira",
 "Forma para bolo",
-"Pregador",
-"Toalha de banho e rosto",
-"Luvas de silicone",
+"Toalha",
 "Potes de vidro",
-"Balde de gelo",
-"Lixeira de banheiro",
-"Lixinho de cozinha",
-"Porta guardanapo",
-"Cesto de roupa",
-"Varal de chão",
-"Pano de limpeza",
-"Timer de cozinha",
-"Leiteira",
-"Cuscuzeira",
-"Chaleira elétrica",
-"Espremedor",
-"Tesoura de cozinha",
-"Cortador de pizza",
-"Fatiador de queijo",
-"Descascador",
-"Suporte papel toalha",
-"Capacho",
-"Parafusadeira",
-"Espátula",
-"Aspirador de pó",
-"Avental",
-"Potes herméticos",
-"Aromatizador",
-"Canecas",
-"Saladeira",
-"Jogo de bowls",
-"Molheira",
-"Petisqueira",
+"Lixeira",
+"Varal",
+"Aspirador",
 "Ferro de passar",
-"Tábua de passar",
-"Suporte vassoura",
 "Cabides",
 "Frigideira",
-"Veda embalagem",
-"Colher de pau",
 "Extensão",
-"Funil",
-"Benjamim"
-];
+"Funil"
 
-let lista = document.getElementById("listaPresentes");
+]
 
-presentes.forEach((item, index) => {
+let lista = document.getElementById("lista")
 
-let li = document.createElement("li");
+presentes.forEach(function(item){
 
-let botao = document.createElement("button");
+lista.innerHTML += `
 
-botao.innerText = item;
+<div class="item">
 
-botao.onclick = function(){
+${item}
 
-let nome = document.getElementById("nome").value;
+<br><br>
+
+<button onclick="escolher(this)">
+Escolher
+</button>
+
+</div>
+
+`
+
+})
+
+function escolher(botao){
+
+let nome = document.getElementById("nome").value
 
 if(nome == ""){
-alert("Digite seu nome");
-return;
-}
 
-botao.innerText = "Reservado por " + nome;
+alert("Digite seu nome")
 
-botao.disabled = true;
+return
 
 }
 
-li.appendChild(botao);
+botao.parentElement.innerHTML =
 
-lista.appendChild(li);
+"Reservado por " + nome + " ❤️"
 
-});
+}
 
 </script>
+
+</body>
+</html>
+
 
