@@ -7,77 +7,15 @@
 <style>
 
 body{
-font-family: Arial;
-text-align:center;
-background:#f5f1ea;
-}
+<h2>Escolha seu presente 🎁</h2>
 
-h1{
-color:#5a4b3c;
-}
+<input type="text" id="nome" placeholder="Digite seu nome">
 
-.item{
-background:white;
-margin:10px;
-padding:10px;
-border-radius:10px;
-width:300px;
-margin-left:auto;
-margin-right:auto;
-}
-
-button{
-background:#c9b8a6;
-border:none;
-padding:5px 10px;
-border-radius:5px;
-cursor:pointer;
-}
-
-input{
-padding:5px;
-margin:5px;
-}
-
-</style>
-
-</head>
-<body>
-
-<h1>Chá de Cozinha da Lígia 🤍</h1>
-
-<p>
-
-21 de Fevereiro de 2026
-
-<br><br>
-
-Com o coração cheio de alegria, convido você para fazer parte desse momento tão especial da minha vida 🤍
-
-<br><br>
-
-Preparei essa lista com muito carinho.
-
-<br>
-
-Sua presença e seu gesto significam muito para mim.
-
-<br><br>
-
-Que Deus abençoe sua vida grandemente ✨
-
-</p>
-
-<h2>Escolha um presente 🎁</h2>
-
-<input id="nome" placeholder="Seu nome">
-
-<div id="lista"></div>
+<ul id="listaPresentes"></ul>
 
 <script>
 
-const itens = [
-
+let presentes = [
 "Pano de chão",
 "Amolador de faca",
 "Escorredor de louça",
@@ -90,105 +28,80 @@ const itens = [
 "Cafeteira",
 "Forma para bolo",
 "Pregador",
-"Toalha de banho",
+"Toalha de banho e rosto",
 "Luvas de silicone",
 "Potes de vidro",
 "Balde de gelo",
 "Lixeira de banheiro",
-"Lixeira de cozinha",
+"Lixinho de cozinha",
+"Porta guardanapo",
 "Cesto de roupa",
 "Varal de chão",
+"Pano de limpeza",
 "Timer de cozinha",
 "Leiteira",
 "Cuscuzeira",
 "Chaleira elétrica",
+"Espremedor",
 "Tesoura de cozinha",
 "Cortador de pizza",
-"Descascador de legumes",
+"Fatiador de queijo",
+"Descascador",
+"Suporte papel toalha",
 "Capacho",
 "Parafusadeira",
+"Espátula",
 "Aspirador de pó",
 "Avental",
 "Potes herméticos",
+"Aromatizador",
 "Canecas",
 "Saladeira",
+"Jogo de bowls",
+"Molheira",
 "Petisqueira",
 "Ferro de passar",
 "Tábua de passar",
+"Suporte vassoura",
 "Cabides",
 "Frigideira",
+"Veda embalagem",
+"Colher de pau",
 "Extensão",
-"Funil"
-
+"Funil",
+"Benjamim"
 ];
 
-function carregar(){
+let lista = document.getElementById("listaPresentes");
 
-let escolhidos =
-JSON.parse(localStorage.getItem("escolhidos")) || [];
+presentes.forEach((item, index) => {
 
-let lista = document.getElementById("lista");
+let li = document.createElement("li");
 
-lista.innerHTML="";
+let botao = document.createElement("button");
 
-itens.forEach(item=>{
+botao.innerText = item;
 
-if(!escolhidos.includes(item)){
+botao.onclick = function(){
 
-lista.innerHTML += `
+let nome = document.getElementById("nome").value;
 
-<div class="item">
+if(nome == ""){
+alert("Digite seu nome");
+return;
+}
 
-${item}
+botao.innerText = "Reservado por " + nome;
 
-<br><br>
-
-<button onclick="escolher('${item}')">
-
-Escolher
-
-</button>
-
-</div>
-
-`;
+botao.disabled = true;
 
 }
+
+li.appendChild(botao);
+
+lista.appendChild(li);
 
 });
 
-}
-
-function escolher(item){
-
-let nome =
-document.getElementById("nome").value;
-
-if(nome==""){
-
-alert("Digite seu nome");
-
-return;
-
-}
-
-let escolhidos =
-JSON.parse(localStorage.getItem("escolhidos")) || [];
-
-escolhidos.push(item);
-
-localStorage.setItem("escolhidos",
-JSON.stringify(escolhidos));
-
-alert(nome + " escolheu " + item + " 💖");
-
-carregar();
-
-}
-
-carregar();
-
 </script>
 
-</body>
-</html>
