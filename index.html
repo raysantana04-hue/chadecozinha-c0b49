@@ -38,7 +38,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-  // Suas configurações do Firebase
+  // Suas configurações reais do Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
     authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
@@ -50,77 +50,56 @@
     measurementId: "G-PXVHMW524J"
   };
 
-  // Inicializa o Firebase no padrão Compat (v8)
+  // Inicializa o Firebase SEM USAR "IMPORT"
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
-  // Função para carregar os 54 itens do Realtime Database em tempo real
   function carregar() {
     database.ref('presentes').on('value', (snapshot) => {
-      const presentesData = snapshot.val();
+      const presentes = snapshot.val();
       let html = "";
 
-      if (!presentesData) {
-        document.getElementById("lista").innerHTML = "<p>Nenhum presente encontrado. Verifique a importação do JSON.</p>";
+      if (!presentes) {
+        document.getElementById("lista").innerHTML = "<p>Nenhum presente no banco. Verifique o Realtime Database.</p>";
         return;
       }
 
-      // Garante que o objeto do Firebase seja tratado como lista para o loop
-      // O seu JSON tem campos como nome, imagem e link
-      presentesData.forEach((item, i) => {
-        const isReservado = item.reservado;
-        const textoBotao = isReservado ? `Reservado por ${item.pessoa}` : "Escolher Presente";
-        const classeBotao = isReservado ? "reservado-estilo" : "";
-
+      // O loop que cria os cartões dos 54 itens
+      presentes.forEach((item, i) => {
+        if (!item) return;
+        const reservado = item.reservado;
+        
         html += `
           <div class="item">
             <img src="${item.imagem}" alt="${item.nome}">
             <h3>${item.nome}</h3>
-            <a href="${item.link}" target="_blank" class="link-sugestao">Sugestão de Produto</a>
-            
-            ${!isReservado ? `
+            <a href="${item.link}" target="_blank" class="link-sugestao">Ver no Mercado Livre</a>
+            ${!reservado ? `
               <input id="nome${i}" placeholder="Seu nome">
               <br><br>
-              <button onclick="reservar(${i})" id="btn${i}">
-                ${textoBotao}
-              </button>
+              <button onclick="reservar(${i})">Escolher</button>
             ` : `
-              <button class="reservado-estilo" disabled>
-                ${textoBotao}
-              </button>
+              <button class="reservado-estilo" disabled>Reservado por ${item.pessoa}</button>
             `}
           </div>
         `;
       });
-
       document.getElementById("lista").innerHTML = html;
     });
   }
 
-  // Função para salvar a reserva no banco de dados
   function reservar(i) {
-    const nomeConvidado = document.getElementById("nome" + i).value;
+    const nome = document.getElementById("nome" + i).value;
+    if (!nome) return alert("Digite seu nome!");
 
-    if (nomeConvidado.trim() === "") {
-      alert("Por favor, digite seu nome para reservar.");
-      return;
-    }
-
-    // Atualiza o item específico no Firebase Realtime Database
     database.ref('presentes/' + i).update({
       reservado: true,
-      pessoa: nomeConvidado
-    })
-    .then(() => {
-      alert("Obrigado! Presente reservado com sucesso. ❤️");
-    })
-    .catch((error) => {
-      console.error("Erro ao reservar:", error);
-      alert("Houve um erro. Verifique se as Regras do Banco estão abertas.");
+      pessoa: nome
+    }).then(() => {
+      alert("Sucesso! ❤️");
     });
   }
 
-  // Inicia o carregamento
   carregar();
 </script>
 
