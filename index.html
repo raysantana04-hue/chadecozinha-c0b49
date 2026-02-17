@@ -5,170 +5,121 @@
 <title>Chá de Cozinha da Lígia 🤍</title>
 
 <style>
-
-body{
-font-family: Arial;
-background:#f5f1ea;
-margin:0;
-text-align:center;
-}
-
-header{
-background:black;
-color:white;
-padding:30px;
-}
-
-h1{
-margin:0;
-}
-
-.container{
-
-padding:20px;
-
-}
-
-.item{
-
-background:white;
-margin:10px auto;
-padding:15px;
-width:300px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-
-}
-
-button{
-
-background:black;
-color:white;
-border:none;
-padding:10px;
-border-radius:5px;
-cursor:pointer;
-
-}
-
-button:hover{
-
-background:#444;
-
-}
-
-.reservado{
-
-background:#ccc;
-
-}
-
-input{
-
-padding:8px;
-margin-top:5px;
-width:80%;
-
-}
-
+    body { font-family: Arial; background:#f5f1ea; margin:0; text-align:center; }
+    header { background:black; color:white; padding:30px; }
+    h1 { margin:0; }
+    .container { padding:20px; display: flex; flex-wrap: wrap; justify-content: center; }
+    .item { 
+        background:white; margin:10px; padding:15px; width:280px; 
+        border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); 
+        transition: transform 0.2s;
+    }
+    .item:hover { transform: scale(1.02); }
+    .item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+    button { background:black; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; width: 100%; }
+    button:hover { background:#444; }
+    .reservado-estilo { background:#ccc !important; cursor: not-allowed; }
+    input { padding:8px; margin-top:5px; width:90%; border: 1px solid #ddd; border-radius: 4px; }
+    .link-sugestao { display: block; margin: 10px 0; font-size: 12px; color: #0066ff; text-decoration: none; }
 </style>
-
 </head>
 
 <body>
 
 <header>
-
-<h1>Chá de Cozinha da Lígia 🤍</h1>
-
-<p>21 de Fevereiro de 2026</p>
-
-<p>Escolha seu presente com carinho ✨</p>
-
+    <h1>Chá de Cozinha da Lígia 🤍</h1>
+    <p>21 de Fevereiro de 2026</p>
+    <p>Escolha seu presente com carinho ✨</p>
 </header>
 
-<div class="container" id="lista"></div>
+<div class="container" id="lista">Carregando presentes...</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
+  // 1. COLE SUAS CONFIGURAÇÕES DO FIREBASE AQUI:
+  const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "chadecozinha-c0b49.firebaseapp.com",
+    databaseURL: "https://chadecozinha-c0b49-default-rtdb.firebaseio.com",
+    projectId: "chadecozinha-c0b49",
+    storageBucket: "chadecozinha-c0b49.appspot.com",
+    messagingSenderId: "SEU_ID",
+    appId: "SEU_APP_ID"
+  };
 
-const presentes = [
+  // Inicializa o Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
 
-"Pano de chão",
-"Amolador de faca",
-"Escorredor de louça",
-"Copos",
-"Pratos",
-"Xícaras",
-"Talheres",
-"Batedeira",
-"Cafeteira",
-"Forma para bolo",
-"Toalha de banho",
-"Luvas de silicone",
-"Potes de vidro",
-"Lixeira",
-"Cesto de roupa"
+  // 2. Função para carregar os dados em tempo real
+  function carregar() {
+    database.ref('presentes').on('value', (snapshot) => {
+      const presentes = snapshot.val();
+      let html = "";
 
-];
+      if (!presentes) {
+        document.getElementById("lista").innerHTML = "<p>Nenhum presente encontrado no banco.</p>";
+        return;
+      }
 
-function carregar(){
+      // O Realtime trata o JSON importado como um array ou objeto
+      presentes.forEach((item, i) => {
+        const statusReservado = item.reservado;
+        const textoBotao = statusReservado ? `Reservado por ${item.pessoa}` : "Escolher Presente";
+        const classeReservado = statusReservado ? "reservado-estilo" : "";
 
-let html="";
+        html += `
+          <div class="item">
+            <img src="${item.imagem}" alt="${item.nome}">
+            <h3>${item.nome}</h3>
+            <a href="${item.link}" target="_blank" class="link-sugestao">Ver sugestão no Mercado Livre</a>
+            
+            ${!statusReservado ? `
+              <input id="nome${i}" placeholder="Seu nome">
+              <br><br>
+              <button onclick="reservar(${i})" id="btn${i}">
+                ${textoBotao}
+              </button>
+            ` : `
+              <button class="reservado-estilo" disabled>
+                ${textoBotao}
+              </button>
+            `}
+          </div>
+        `;
+      });
 
-presentes.forEach((item,i)=>{
+      document.getElementById("lista").innerHTML = html;
+    });
+  }
 
-html+=`
+  // 3. Função para salvar a reserva
+  function reservar(i) {
+    const nomeConvidado = document.getElementById("nome" + i).value;
 
-<div class="item">
+    if (nomeConvidado === "") {
+      alert("Por favor, digite seu nome para reservar.");
+      return;
+    }
 
-<h3>${item}</h3>
+    // Atualiza o item específico no Firebase
+    database.ref('presentes/' + i).update({
+      reservado: true,
+      pessoa: nomeConvidado
+    })
+    .then(() => {
+      alert("Presente reservado com sucesso! ❤️");
+    })
+    .catch((error) => {
+      console.error("Erro ao reservar:", error);
+      alert("Erro ao salvar. Verifique as regras do banco.");
+    });
+  }
 
-<input id="nome${i}" placeholder="Seu nome">
-
-<br><br>
-
-<button onclick="reservar(${i})" id="btn${i}">
-
-Escolher
-
-</button>
-
-</div>
-
-`;
-
-});
-
-document.getElementById("lista").innerHTML=html;
-
-}
-
-function reservar(i){
-
-let nome=document.getElementById("nome"+i).value;
-
-if(nome==""){
-
-alert("Digite seu nome");
-
-return;
-
-}
-
-let btn=document.getElementById("btn"+i);
-
-btn.innerHTML="Reservado por "+nome;
-
-btn.disabled=true;
-
-btn.classList.add("reservado");
-
-}
-
-carregar();
-
+  carregar();
 </script>
 
 </body>
-
 </html>
