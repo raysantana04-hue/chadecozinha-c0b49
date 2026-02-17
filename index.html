@@ -10,50 +10,34 @@
 <style>
 
 body{
-
 margin:0;
 font-family:Poppins;
-background:linear-gradient(135deg,#f5f3ef,#e8e4dc);
-
+background:#f5f3ef;
 }
 
 header{
-
 background:black;
 color:white;
 text-align:center;
 padding:40px;
-
-}
-
-header h1{
-
-margin:0;
-font-weight:300;
-
 }
 
 .container{
-
 max-width:900px;
 margin:auto;
-padding:30px;
-
+padding:20px;
 }
 
 .item{
-
 background:white;
-margin:15px;
+margin:10px;
 padding:20px;
 border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
+box-shadow:0 5px 10px rgba(0,0,0,0.1);
 text-align:center;
-
 }
 
 button{
-
 background:black;
 color:white;
 border:none;
@@ -61,31 +45,14 @@ padding:10px 20px;
 border-radius:20px;
 cursor:pointer;
 margin-top:10px;
-
-}
-
-button:hover{
-
-background:#333;
-
 }
 
 input{
-
 padding:10px;
 width:70%;
 border-radius:20px;
 border:1px solid #ccc;
 margin-top:10px;
-
-}
-
-footer{
-
-text-align:center;
-padding:30px;
-opacity:0.5;
-
 }
 
 </style>
@@ -106,12 +73,6 @@ opacity:0.5;
 
 <div class="container" id="lista"></div>
 
-<footer>
-
-Feito com amor 🤍
-
-</footer>
-
 <script type="module">
 
 import { initializeApp }
@@ -124,33 +85,86 @@ getFirestore,
 collection,
 getDocs,
 updateDoc,
-doc
+doc,
+setDoc
 
 }
 
 from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+
 const firebaseConfig = {
 
-apiKey: "SUA API KEY",
+apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
 
-authDomain: "SEU AUTHDOMAIN",
+authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
 
-projectId: "SEU PROJECTID",
+projectId: "chadecozinha-c0b49-27555",
 
-storageBucket: "SEU STORAGE",
+storageBucket: "chadecozinha-c0b49-27555.firebasestorage.app",
 
-messagingSenderId: "SEU ID",
+messagingSenderId: "210066909829",
 
-appId: "SEU APPID"
+appId: "1:210066909829:web:bb6958ff15e1a18e3017ec"
 
 };
+
 
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
 const lista = document.getElementById("lista");
+
+
+async function criarPresentes(){
+
+const presentes = [
+
+"pano de chão",
+"amolador de faca",
+"escorredor de louça",
+"copos",
+"pratos",
+"xícaras",
+"talheres",
+"batedeira",
+"cafeteira",
+"forma para bolo",
+"toalha",
+"balde de gelo",
+"lixeira",
+"cesto de roupa",
+"varal",
+"leiteira",
+"cuscuzeira",
+"chaleira elétrica",
+"tesoura",
+"frigideira",
+"avental",
+"ferro de passar"
+
+];
+
+const querySnapshot = await getDocs(collection(db,"presentes"));
+
+if(querySnapshot.empty){
+
+presentes.forEach(async(nome)=>{
+
+await setDoc(doc(collection(db,"presentes")),{
+
+nome:nome,
+reservado:false
+
+});
+
+});
+
+}
+
+}
+
 
 async function carregar(){
 
@@ -164,11 +178,11 @@ const d = docSnap.data();
 
 if(!d.reservado){
 
-lista.innerHTML += `
+lista.innerHTML+=`
 
 <div class="item">
 
-<h2>${d.nome}</h2>
+<h3>${d.nome}</h3>
 
 <input id="nome-${docSnap.id}" placeholder="Seu nome">
 
@@ -190,9 +204,10 @@ Escolher
 
 }
 
+
 window.reservar = async function(id){
 
-const nome = document.getElementById("nome-"+id).value;
+const nome=document.getElementById("nome-"+id).value;
 
 if(nome==""){
 
@@ -205,16 +220,18 @@ return;
 await updateDoc(doc(db,"presentes",id),{
 
 reservado:true,
-
 pessoa:nome
 
 });
 
-alert("Presente reservado 🤍");
+alert("Reservado com sucesso 🤍");
 
 carregar();
 
 }
+
+
+criarPresentes();
 
 carregar();
 
