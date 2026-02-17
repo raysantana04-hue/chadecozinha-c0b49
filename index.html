@@ -1,58 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
 <meta charset="UTF-8">
 <title>Chá de Cozinha da Lígia 🤍</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 
 body{
+font-family: Arial;
+background:#f5f1ea;
 margin:0;
-font-family:Poppins;
-background:#f5f3ef;
+text-align:center;
 }
 
 header{
 background:black;
 color:white;
-text-align:center;
-padding:40px;
+padding:30px;
+}
+
+h1{
+margin:0;
 }
 
 .container{
-max-width:900px;
-margin:auto;
+
 padding:20px;
+
 }
 
 .item{
+
 background:white;
-margin:10px;
-padding:20px;
+margin:10px auto;
+padding:15px;
+width:300px;
 border-radius:10px;
-box-shadow:0 5px 10px rgba(0,0,0,0.1);
-text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+
 }
 
 button{
+
 background:black;
 color:white;
 border:none;
-padding:10px 20px;
-border-radius:20px;
+padding:10px;
+border-radius:5px;
 cursor:pointer;
-margin-top:10px;
+
+}
+
+button:hover{
+
+background:#444;
+
+}
+
+.reservado{
+
+background:#ccc;
+
 }
 
 input{
-padding:10px;
-width:70%;
-border-radius:20px;
-border:1px solid #ccc;
-margin-top:10px;
+
+padding:8px;
+margin-top:5px;
+width:80%;
+
 }
 
 </style>
@@ -73,122 +89,45 @@ margin-top:10px;
 
 <div class="container" id="lista"></div>
 
-<script type="module">
-
-import { initializeApp }
-
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-import {
-
-getFirestore,
-collection,
-getDocs,
-updateDoc,
-doc,
-setDoc
-
-}
-
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
-
-authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
-
-projectId: "chadecozinha-c0b49-27555",
-
-storageBucket: "chadecozinha-c0b49-27555.firebasestorage.app",
-
-messagingSenderId: "210066909829",
-
-appId: "1:210066909829:web:bb6958ff15e1a18e3017ec"
-
-};
-
-
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-const lista = document.getElementById("lista");
-
-
-async function criarPresentes(){
+<script>
 
 const presentes = [
 
-"pano de chão",
-"amolador de faca",
-"escorredor de louça",
-"copos",
-"pratos",
-"xícaras",
-"talheres",
-"batedeira",
-"cafeteira",
-"forma para bolo",
-"toalha",
-"balde de gelo",
-"lixeira",
-"cesto de roupa",
-"varal",
-"leiteira",
-"cuscuzeira",
-"chaleira elétrica",
-"tesoura",
-"frigideira",
-"avental",
-"ferro de passar"
+"Pano de chão",
+"Amolador de faca",
+"Escorredor de louça",
+"Copos",
+"Pratos",
+"Xícaras",
+"Talheres",
+"Batedeira",
+"Cafeteira",
+"Forma para bolo",
+"Toalha de banho",
+"Luvas de silicone",
+"Potes de vidro",
+"Lixeira",
+"Cesto de roupa"
 
 ];
 
-const querySnapshot = await getDocs(collection(db,"presentes"));
+function carregar(){
 
-if(querySnapshot.empty){
+let html="";
 
-presentes.forEach(async(nome)=>{
+presentes.forEach((item,i)=>{
 
-await setDoc(doc(collection(db,"presentes")),{
-
-nome:nome,
-reservado:false
-
-});
-
-});
-
-}
-
-}
-
-
-async function carregar(){
-
-const querySnapshot = await getDocs(collection(db,"presentes"));
-
-lista.innerHTML="";
-
-querySnapshot.forEach((docSnap)=>{
-
-const d = docSnap.data();
-
-if(!d.reservado){
-
-lista.innerHTML+=`
+html+=`
 
 <div class="item">
 
-<h3>${d.nome}</h3>
+<h3>${item}</h3>
 
-<input id="nome-${docSnap.id}" placeholder="Seu nome">
+<input id="nome${i}" placeholder="Seu nome">
 
-<br>
+<br><br>
 
-<button onclick="reservar('${docSnap.id}')">
+<button onclick="reservar(${i})" id="btn${i}">
 
 Escolher
 
@@ -198,16 +137,15 @@ Escolher
 
 `;
 
-}
-
 });
 
+document.getElementById("lista").innerHTML=html;
+
 }
 
+function reservar(i){
 
-window.reservar = async function(id){
-
-const nome=document.getElementById("nome-"+id).value;
+let nome=document.getElementById("nome"+i).value;
 
 if(nome==""){
 
@@ -217,21 +155,15 @@ return;
 
 }
 
-await updateDoc(doc(db,"presentes",id),{
+let btn=document.getElementById("btn"+i);
 
-reservado:true,
-pessoa:nome
+btn.innerHTML="Reservado por "+nome;
 
-});
+btn.disabled=true;
 
-alert("Reservado com sucesso 🤍");
-
-carregar();
+btn.classList.add("reservado");
 
 }
-
-
-criarPresentes();
 
 carregar();
 
