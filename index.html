@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
 <title>Chá de Cozinha da Lígia 🤍</title>
 
@@ -9,72 +10,45 @@
 <style>
 
 body{
+
 margin:0;
 font-family:Poppins;
-background:linear-gradient(135deg,#f8f6f2,#ece8df);
+background:linear-gradient(135deg,#f5f3ef,#e8e4dc);
+
 }
 
 header{
+
 background:black;
 color:white;
 text-align:center;
 padding:40px;
+
 }
 
 header h1{
+
 margin:0;
 font-weight:300;
-font-size:40px;
-}
 
-header p{
-opacity:0.7;
 }
 
 .container{
-max-width:1100px;
+
+max-width:900px;
 margin:auto;
 padding:30px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-gap:25px;
+
 }
 
-.card{
+.item{
 
 background:white;
-border-radius:15px;
-overflow:hidden;
-box-shadow:0 10px 25px rgba(0,0,0,0.1);
-transition:0.3s;
-
-}
-
-.card:hover{
-
-transform:translateY(-5px);
-
-}
-
-.card img{
-
-width:100%;
-height:220px;
-object-fit:cover;
-
-}
-
-.card-body{
-
+margin:15px;
 padding:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 text-align:center;
-
-}
-
-.card-body h2{
-
-font-size:20px;
-margin:10px 0;
 
 }
 
@@ -83,36 +57,26 @@ button{
 background:black;
 color:white;
 border:none;
-padding:12px 25px;
-border-radius:30px;
+padding:10px 20px;
+border-radius:20px;
 cursor:pointer;
-font-weight:600;
 margin-top:10px;
-transition:0.3s;
 
 }
 
 button:hover{
 
-background:#444;
-
-}
-
-.reserved{
-
-background:#ccc !important;
-cursor:not-allowed;
+background:#333;
 
 }
 
 input{
 
-width:80%;
 padding:10px;
-margin-top:10px;
+width:70%;
 border-radius:20px;
-border:1px solid #ddd;
-text-align:center;
+border:1px solid #ccc;
+margin-top:10px;
 
 }
 
@@ -127,6 +91,7 @@ opacity:0.5;
 </style>
 
 </head>
+
 <body>
 
 <header>
@@ -149,7 +114,9 @@ Feito com amor 🤍
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { initializeApp }
+
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
 import {
 
@@ -165,17 +132,17 @@ from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
+apiKey: "SUA API KEY",
 
-authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
+authDomain: "SEU AUTHDOMAIN",
 
-projectId: "chadecozinha-c0b49-27555",
+projectId: "SEU PROJECTID",
 
-storageBucket: "chadecozinha-c0b49-27555.firebasestorage.app",
+storageBucket: "SEU STORAGE",
 
-messagingSenderId: "210066909829",
+messagingSenderId: "SEU ID",
 
-appId: "1:210066909829:web:bb6958ff15e1a18e3017ec"
+appId: "SEU APPID"
 
 };
 
@@ -195,51 +162,29 @@ querySnapshot.forEach((docSnap)=>{
 
 const d = docSnap.data();
 
+if(!d.reservado){
+
 lista.innerHTML += `
 
-<div class="card">
-
-<img src="${d.imagem}">
-
-<div class="card-body">
+<div class="item">
 
 <h2>${d.nome}</h2>
-
-<a href="${d.link}" target="_blank">
-
-<button>
-
-Ver no Mercado Livre
-
-</button>
-
-</a>
-
-<br>
 
 <input id="nome-${docSnap.id}" placeholder="Seu nome">
 
 <br>
 
-<button
+<button onclick="reservar('${docSnap.id}')">
 
-id="btn-${docSnap.id}"
-
-onclick="reservar('${docSnap.id}')"
-
-class="${d.reservado ? 'reserved':''}"
-
->
-
-${d.reservado ? 'Reservado':'Escolher'}
+Escolher
 
 </button>
 
 </div>
 
-</div>
-
 `;
+
+}
 
 });
 
@@ -265,7 +210,7 @@ pessoa:nome
 
 });
 
-alert("Presente reservado com sucesso 🤍");
+alert("Presente reservado 🤍");
 
 carregar();
 
@@ -276,4 +221,5 @@ carregar();
 </script>
 
 </body>
+
 </html>
