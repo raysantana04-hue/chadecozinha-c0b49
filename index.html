@@ -38,57 +38,47 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
- // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+  // Suas configurações do Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
+    authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
+    databaseURL: "https://chadecozinha-c0b49-27555-default-rtdb.firebaseio.com",
+    projectId: "chadecozinha-c0b49-27555",
+    storageBucket: "chadecozinha-c0b49-27555.firebasestorage.app",
+    messagingSenderId: "210066909829",
+    appId: "1:210066909829:web:bb6958ff15e1a18e3017ec",
+    measurementId: "G-PXVHMW524J"
+  };
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
-  authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
-  databaseURL: "https://chadecozinha-c0b49-27555-default-rtdb.firebaseio.com",
-  projectId: "chadecozinha-c0b49-27555",
-  storageBucket: "chadecozinha-c0b49-27555.firebasestorage.app",
-  messagingSenderId: "210066909829",
-  appId: "1:210066909829:web:bb6958ff15e1a18e3017ec",
-  measurementId: "G-PXVHMW524J"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-  // Inicializa o Firebase
+  // Inicializa o Firebase no padrão Compat (v8)
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
-  // 2. Função para carregar os dados em tempo real
+  // Função para carregar os 54 itens do Realtime Database em tempo real
   function carregar() {
     database.ref('presentes').on('value', (snapshot) => {
-      const presentes = snapshot.val();
+      const presentesData = snapshot.val();
       let html = "";
 
-      if (!presentes) {
-        document.getElementById("lista").innerHTML = "<p>Nenhum presente encontrado no banco.</p>";
+      if (!presentesData) {
+        document.getElementById("lista").innerHTML = "<p>Nenhum presente encontrado. Verifique a importação do JSON.</p>";
         return;
       }
 
-      // O Realtime trata o JSON importado como um array ou objeto
-      presentes.forEach((item, i) => {
-        const statusReservado = item.reservado;
-        const textoBotao = statusReservado ? `Reservado por ${item.pessoa}` : "Escolher Presente";
-        const classeReservado = statusReservado ? "reservado-estilo" : "";
+      // Garante que o objeto do Firebase seja tratado como lista para o loop
+      // O seu JSON tem campos como nome, imagem e link
+      presentesData.forEach((item, i) => {
+        const isReservado = item.reservado;
+        const textoBotao = isReservado ? `Reservado por ${item.pessoa}` : "Escolher Presente";
+        const classeBotao = isReservado ? "reservado-estilo" : "";
 
         html += `
           <div class="item">
             <img src="${item.imagem}" alt="${item.nome}">
             <h3>${item.nome}</h3>
-            <a href="${item.link}" target="_blank" class="link-sugestao">Ver sugestão no Mercado Livre</a>
+            <a href="${item.link}" target="_blank" class="link-sugestao">Sugestão de Produto</a>
             
-            ${!statusReservado ? `
+            ${!isReservado ? `
               <input id="nome${i}" placeholder="Seu nome">
               <br><br>
               <button onclick="reservar(${i})" id="btn${i}">
@@ -107,29 +97,30 @@ const analytics = getAnalytics(app);
     });
   }
 
-  // 3. Função para salvar a reserva
+  // Função para salvar a reserva no banco de dados
   function reservar(i) {
     const nomeConvidado = document.getElementById("nome" + i).value;
 
-    if (nomeConvidado === "") {
+    if (nomeConvidado.trim() === "") {
       alert("Por favor, digite seu nome para reservar.");
       return;
     }
 
-    // Atualiza o item específico no Firebase
+    // Atualiza o item específico no Firebase Realtime Database
     database.ref('presentes/' + i).update({
       reservado: true,
       pessoa: nomeConvidado
     })
     .then(() => {
-      alert("Presente reservado com sucesso! ❤️");
+      alert("Obrigado! Presente reservado com sucesso. ❤️");
     })
     .catch((error) => {
       console.error("Erro ao reservar:", error);
-      alert("Erro ao salvar. Verifique as regras do banco.");
+      alert("Houve um erro. Verifique se as Regras do Banco estão abertas.");
     });
   }
 
+  // Inicia o carregamento
   carregar();
 </script>
 
