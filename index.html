@@ -11,28 +11,31 @@
     h1 { margin:0; font-weight: 300; letter-spacing: 2px; }
     .subtitle { margin-top: 10px; opacity: 0.8; font-size: 0.9em; }
     
-    .container { padding:20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 1200px; margin: 0 auto; }
+    .container { padding:20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 1200px; margin: 0 auto; }
     
     .item { 
-        background:white; padding:20px; width:260px; 
-        border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,0.05); 
+        background:white; padding:15px; width:280px; 
+        border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); 
         display: flex; flex-direction: column; justify-content: space-between;
-        border: 1px solid #eee; transition: transform 0.2s;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid #eee;
     }
-    .item:hover { transform: translateY(-5px); }
+    .item:hover { transform: translateY(-5px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
     
-    h3 { margin: 0 0 10px 0; font-size: 1.1em; color: #000; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+    .item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; background: #fafafa; }
     
-    .link-sugestao { font-size: 12px; color: #0066ff; text-decoration: none; margin-bottom: 15px; display: inline-block; }
+    h3 { margin: 0 0 5px 0; font-size: 1.1em; color: #000; min-height: 2.2em; display: flex; align-items: center; justify-content: center; }
+    
+    .link-sugestao { font-size: 12px; color: #0066ff; text-decoration: none; margin-bottom: 15px; display: block; }
     .link-sugestao:hover { text-decoration: underline; }
     
-    input { padding:10px; width:85%; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; outline: none; }
+    input { padding:10px; width:88%; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 14px; }
     input:focus { border-color: #000; }
     
-    button { background:black; color:white; border:none; padding:12px; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+    button { background:black; color:white; border:none; padding:12px; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold; transition: 0.3s; font-size: 14px; }
     button:hover { background:#333; }
     
-    .reservado-estilo { background:#e0e0e0 !important; color: #888 !important; cursor: not-allowed; }
+    .reservado-estilo { background:#e0e0e0 !important; color: #777 !important; cursor: not-allowed; border: none; }
 </style>
 </head>
 
@@ -41,16 +44,16 @@
 <header>
     <h1>Chá de Cozinha da Lígia 🤍</h1>
     <p class="subtitle">21 de Fevereiro de 2026</p>
-    <p>Escolha um item da lista abaixo para presentear ✨</p>
+    <p>Escolha um presente da lista abaixo para presentear com carinho ✨</p>
 </header>
 
-<div class="container" id="lista">Carregando lista de presentes...</div>
+<div class="container" id="lista">Carregando presentes...</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-  // Suas configurações extraídas do console
+  // Configurações do seu Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
     authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
@@ -62,7 +65,7 @@
     measurementId: "G-PXVHMW524J"
   };
 
-  // Inicialização
+  // Inicializa o Firebase
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
@@ -77,22 +80,23 @@
         return;
       }
 
-      // Itera sobre os 54 itens
+      // Itera sobre a lista de 54 itens
       presentes.forEach((item, i) => {
         if (!item) return;
 
         const isReservado = item.reservado;
-        const textoBtn = isReservado ? `Reservado por ${item.pessoa}` : "Escolher";
+        const textoBtn = isReservado ? `Reservado por ${item.pessoa}` : "Escolher Presente";
         const classeBtn = isReservado ? "reservado-estilo" : "";
 
         html += `
           <div class="item">
+            <img src="${item.imagem}" alt="${item.nome}" onerror="this.src='https://via.placeholder.com/300x200?text=Imagem+Indisponível'">
             <h3>${item.nome}</h3>
             <a href="${item.link}" target="_blank" class="link-sugestao">Ver sugestão de preço</a>
             
             ${!isReservado ? `
               <input id="nome${i}" placeholder="Seu nome">
-              <button onclick="reservar(${i})">${textoBtn}</button>
+              <button onclick="reservar(${i})">Escolher</button>
             ` : `
               <button class="reservado-estilo" disabled>${textoBtn}</button>
             `}
@@ -104,29 +108,30 @@
     });
   }
 
-  // Função para salvar a reserva no banco de dados
+  // Função para realizar a reserva no banco de dados
   function reservar(i) {
     const nomeConvidado = document.getElementById("nome" + i).value;
 
     if (!nomeConvidado.trim()) {
-      alert("Por favor, digite seu nome para reservar.");
+      alert("Por favor, digite seu nome para reservar o presente.");
       return;
     }
 
-    // Atualiza o item específico dentro da pasta "presentes"
+    // Atualiza apenas o item específico dentro da pasta "presentes"
     database.ref('presentes/' + i).update({
       reservado: true,
       pessoa: nomeConvidado
     })
     .then(() => {
-      alert("Presente reservado! Muito obrigado! ❤️");
+      alert("Obrigado! Seu presente foi reservado com sucesso. ❤️");
     })
     .catch((error) => {
-      console.error("Erro:", error);
-      alert("Erro ao salvar. Verifique se as Regras do Firebase estão como 'true'.");
+      console.error("Erro ao reservar:", error);
+      alert("Houve um erro técnico. Verifique as Regras do Firebase.");
     });
   }
 
+  // Inicia o monitoramento em tempo real
   carregar();
 </script>
 
