@@ -2,25 +2,37 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chá de Cozinha da Lígia 🤍</title>
 
 <style>
-    body { font-family: Arial; background:#f5f1ea; margin:0; text-align:center; }
-    header { background:black; color:white; padding:30px; }
-    h1 { margin:0; }
-    .container { padding:20px; display: flex; flex-wrap: wrap; justify-content: center; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f1ea; margin:0; text-align:center; color: #333; }
+    header { background:black; color:white; padding:40px 20px; }
+    h1 { margin:0; font-weight: 300; letter-spacing: 2px; }
+    .subtitle { margin-top: 10px; opacity: 0.8; font-size: 0.9em; }
+    
+    .container { padding:20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 1200px; margin: 0 auto; }
+    
     .item { 
-        background:white; margin:10px; padding:15px; width:280px; 
-        border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1); 
-        transition: transform 0.2s;
+        background:white; padding:20px; width:260px; 
+        border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,0.05); 
+        display: flex; flex-direction: column; justify-content: space-between;
+        border: 1px solid #eee; transition: transform 0.2s;
     }
-    .item:hover { transform: scale(1.02); }
-    .item img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
-    button { background:black; color:white; border:none; padding:10px; border-radius:5px; cursor:pointer; width: 100%; }
-    button:hover { background:#444; }
-    .reservado-estilo { background:#ccc !important; cursor: not-allowed; }
-    input { padding:8px; margin-top:5px; width:90%; border: 1px solid #ddd; border-radius: 4px; }
-    .link-sugestao { display: block; margin: 10px 0; font-size: 12px; color: #0066ff; text-decoration: none; }
+    .item:hover { transform: translateY(-5px); }
+    
+    h3 { margin: 0 0 10px 0; font-size: 1.1em; color: #000; min-height: 2.4em; display: flex; align-items: center; justify-content: center; }
+    
+    .link-sugestao { font-size: 12px; color: #0066ff; text-decoration: none; margin-bottom: 15px; display: inline-block; }
+    .link-sugestao:hover { text-decoration: underline; }
+    
+    input { padding:10px; width:85%; border: 1px solid #ddd; border-radius: 6px; margin-bottom: 10px; outline: none; }
+    input:focus { border-color: #000; }
+    
+    button { background:black; color:white; border:none; padding:12px; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold; transition: 0.3s; }
+    button:hover { background:#333; }
+    
+    .reservado-estilo { background:#e0e0e0 !important; color: #888 !important; cursor: not-allowed; }
 </style>
 </head>
 
@@ -28,17 +40,17 @@
 
 <header>
     <h1>Chá de Cozinha da Lígia 🤍</h1>
-    <p>21 de Fevereiro de 2026</p>
-    <p>Escolha seu presente com carinho ✨</p>
+    <p class="subtitle">21 de Fevereiro de 2026</p>
+    <p>Escolha um item da lista abaixo para presentear ✨</p>
 </header>
 
-<div class="container" id="lista">Carregando presentes...</div>
+<div class="container" id="lista">Carregando lista de presentes...</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-  // Suas configurações reais do Firebase
+  // Suas configurações extraídas do console
   const firebaseConfig = {
     apiKey: "AIzaSyCm9DgExRWhYNryZMMrO00Ya9g0lfNHilU",
     authDomain: "chadecozinha-c0b49-27555.firebaseapp.com",
@@ -50,53 +62,68 @@
     measurementId: "G-PXVHMW524J"
   };
 
-  // Inicializa o Firebase SEM USAR "IMPORT"
+  // Inicialização
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
+  // Função para carregar os dados em tempo real da chave "presentes"
   function carregar() {
     database.ref('presentes').on('value', (snapshot) => {
       const presentes = snapshot.val();
       let html = "";
 
       if (!presentes) {
-        document.getElementById("lista").innerHTML = "<p>Nenhum presente no banco. Verifique o Realtime Database.</p>";
+        document.getElementById("lista").innerHTML = "<p>Nenhum presente encontrado no banco.</p>";
         return;
       }
 
-      // O loop que cria os cartões dos 54 itens
+      // Itera sobre os 54 itens
       presentes.forEach((item, i) => {
         if (!item) return;
-        const reservado = item.reservado;
-        
+
+        const isReservado = item.reservado;
+        const textoBtn = isReservado ? `Reservado por ${item.pessoa}` : "Escolher";
+        const classeBtn = isReservado ? "reservado-estilo" : "";
+
         html += `
           <div class="item">
-            <img src="${item.imagem}" alt="${item.nome}">
             <h3>${item.nome}</h3>
-            <a href="${item.link}" target="_blank" class="link-sugestao">Ver no Mercado Livre</a>
-            ${!reservado ? `
+            <a href="${item.link}" target="_blank" class="link-sugestao">Ver sugestão de preço</a>
+            
+            ${!isReservado ? `
               <input id="nome${i}" placeholder="Seu nome">
-              <br><br>
-              <button onclick="reservar(${i})">Escolher</button>
+              <button onclick="reservar(${i})">${textoBtn}</button>
             ` : `
-              <button class="reservado-estilo" disabled>Reservado por ${item.pessoa}</button>
+              <button class="reservado-estilo" disabled>${textoBtn}</button>
             `}
           </div>
         `;
       });
+
       document.getElementById("lista").innerHTML = html;
     });
   }
 
+  // Função para salvar a reserva no banco de dados
   function reservar(i) {
-    const nome = document.getElementById("nome" + i).value;
-    if (!nome) return alert("Digite seu nome!");
+    const nomeConvidado = document.getElementById("nome" + i).value;
 
+    if (!nomeConvidado.trim()) {
+      alert("Por favor, digite seu nome para reservar.");
+      return;
+    }
+
+    // Atualiza o item específico dentro da pasta "presentes"
     database.ref('presentes/' + i).update({
       reservado: true,
-      pessoa: nome
-    }).then(() => {
-      alert("Sucesso! ❤️");
+      pessoa: nomeConvidado
+    })
+    .then(() => {
+      alert("Presente reservado! Muito obrigado! ❤️");
+    })
+    .catch((error) => {
+      console.error("Erro:", error);
+      alert("Erro ao salvar. Verifique se as Regras do Firebase estão como 'true'.");
     });
   }
 
